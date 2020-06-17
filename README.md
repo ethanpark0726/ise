@@ -17,7 +17,10 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
   * *One big thing is that module is now renamed from ise.cream to just ise.*
 * First publish to PyPi with the help of [https://github.com/JonasKs](https://github.com/JonasKs).
 * Add support for ISE CSRF and some TrustSec objects (SGT, SGACL, Egress Policy Matrix) [https://github.com/joshand](https://github.com/joshand).
-* I made a audit workflow to organize up-to-date device list on ISE server. 
+
+## My Usage
+* I made a audit workflow to organize up-to-date device list on ISE server
+
 ## Status
 
 Tested and used in our environment at work. But as usual it's up to you to test this out in a test environment so everything works as intended.
