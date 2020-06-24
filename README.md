@@ -20,7 +20,7 @@ I forked from them and updated so it worked with ISE 2.2.x and changed all funct
 
 ## My Usage
 * I made a audit workflow to organize up-to-date device list on ISE server  
-: Audit workflow - Simply, checking the device list in the ISE server is up-to-date
+: Audit workflow - Simply, checking the device list in the ISE server then makes it up-to-date
 
 
 ## Status
