@@ -8,6 +8,7 @@ from ise import ERS  # noqa E402
 from pprint import pprint  # noqa E402
 from config import uri, endpoint, endpoint_group, user, identity_group, device, device_group, trustsec  # noqa E402
 from exchangelib import *
+from openpyxl.styles import Border, Side, Font, Alignment, PatternFill
 
 def getList(iseObj):
 
@@ -49,7 +50,7 @@ def getPingResult(deviceIPList):
 
     for deviceIP in deviceIPList:
         
-        result = os.system('ping -n 1 -w 2 ' + deviceIP)
+        result = os.system('ping -n 1 -w 500 ' + deviceIP)
 
         if result == 0:
             pingList[deviceIP] = 'Okay'
@@ -64,11 +65,39 @@ def createExcelFile():
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = 'ISE Device Audit'
+    
+    # Pretty display for the File
+    font = Font(bold=True)
+    alignment = Alignment(horizontal='center')
+    bgColor = PatternFill(fgColor='BFBFBFBF', patternType='solid')
+    border = Border(left=Side(style='thin'),
+                    right=Side(style='thin'),
+                    top=Side(style='thin'),
+                    bottom=Side(style='thin'))
+
     ws['A2'] = nowDate
     ws['A4'] = 'Hostname'
-    ws['B4'] = 'IP Address'
-    ws['C4'] = 'Ping Status'
+    ws['A4'].alignment = alignment
+    ws['A4'].font = font
+    ws['A4'].fill = bgColor
+    ws['A4'].border = border
 
+    ws['B4'] = 'IP Address'
+    ws['B4'].alignment = alignment
+    ws['B4'].font = font
+    ws['B4'].fill = bgColor
+    ws['B4'].border = border
+
+    ws['C4'] = 'Ping Status'
+    ws['C4'].alignment = alignment
+    ws['C4'].font = font  
+    ws['C4'].fill = bgColor
+    ws['C4'].border = border
+
+    ws.column_dimensions['A'].width = 40
+    ws.column_dimensions['B'].width = 15
+    ws.column_dimensions['C'].width = 15
+    
     fileName = 'ISE_Device_Audit.xlsx'
     wb.save(fileName)
     wb.close()
@@ -78,12 +107,27 @@ def saveExcelFile(deviceIDList, deviceIPList, pingResult):
     fileName = 'ISE_Device_Audit.xlsx'
     wb = openpyxl.load_workbook(fileName)
     ws = wb.active
+    alignment = Alignment(horizontal='center')
+    border = Border(left=Side(style='thin'),
+                right=Side(style='thin'),
+                top=Side(style='thin'),
+                bottom=Side(style='thin'))
+
     cellNumber = 5
 
     for i in range(len(deviceIDList)):
         ws['A' + str(cellNumber)] = deviceIDList[i]
+        ws['A' + str(cellNumber)].alignment = alignment
+        ws['A' + str(cellNumber)].border = border
+
         ws['B' + str(cellNumber)] = deviceIPList[i]
+        ws['B' + str(cellNumber)].alignment = alignment
+        ws['B' + str(cellNumber)].border = border
+
         ws['C' + str(cellNumber)] = pingResult.get(deviceIPList[i])
+        ws['C' + str(cellNumber)].alignment = alignment
+        ws['C' + str(cellNumber)].border = border
+
         cellNumber += 1
 
     wb.save('ISE_Device_Audit.xlsx')
@@ -105,16 +149,16 @@ if __name__ == "__main__":
 
     saveExcelFile(deviceIDList, deviceIPList, pingResult)
 
-    credentials = Credentials(username='myID', password='myPassword')
+    credentials = Credentials(username='hpar0001', password='Rhakdnj25~!')
 
-    account = Account(primary_smtp_address='hello@example.com', credentials=credentials, autodiscover=True, access_type=DELEGATE)
+    account = Account(primary_smtp_address='hpar0001@shands.ufl.edu', credentials=credentials, autodiscover=True, access_type=DELEGATE)
 
-    bodyContents = """This is the quarterly ISE Device Audit Email.
+    bodyContents = """ISE's device list audit has been conducted.
     Please check the attachment"""
-    m = Message(account=account, subject='[ISE] Quartely ISE Device Audit', body=bodyContents, 
+    m = Message(account=account, subject='[ISE-Audit] ISE Device Audit', body=bodyContents, 
     to_recipients=[
-        Mailbox(email_address='hello@example.com')])
+        Mailbox(email_address='ahc_neteng@shands.ufl.edu')])
+    
     filePath = open('P:/Script/ISE Audit/ISE_Device_Audit.xlsx', 'rb').read()
     m.attach(FileAttachment(name='ISE_Device_Audit.xlsx', content=filePath))
     m.send()
-    
