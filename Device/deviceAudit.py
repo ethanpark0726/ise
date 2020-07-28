@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
     saveExcelFile(deviceIDList, deviceIPList, pingResult)
 
-    credentials = Credentials(username='hpar0001', password='Rhakdnj25~!')
+    credentials = Credentials(username='myUsername', password='MyPassword')
 
     account = Account(primary_smtp_address='hpar0001@shands.ufl.edu', credentials=credentials, autodiscover=True, access_type=DELEGATE)
 
